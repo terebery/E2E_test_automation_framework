@@ -1,41 +1,39 @@
 package tests;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-import io.qameta.allure.Attachment;
+import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.BrowserContext;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.Playwright;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.TestInfo;
 
 @ExtendWith(tests.ScreenshotOnFailureExtension.class)
-
 public abstract class BaseTest {
-    protected WebDriver driver;
+    protected Playwright playwright;
+    protected Browser browser;
+    protected BrowserContext context;
+    protected Page page;
 
     @BeforeEach
-    void SetUp(){
-        ChromeOptions options = new ChromeOptions();
-
+    void setUp(){
         boolean headless = Boolean.parseBoolean(System.getProperty("headless", "false"));
-        if (headless){
-            options.addArguments("--headless=new");
-            options.addArguments("--no-sandbox");
-            options.addArguments("--disable-dev-shm-usage");
-            options.addArguments("--window-size=1920,1080");
-        }
-        driver = new ChromeDriver(options);
-        driver.manage().window().maximize();
+        playwright = Playwright.create();
+        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
+        context = browser.newContext(new Browser.NewContextOptions().setViewportSize(1920, 1080));
+        page = context.newPage();
     }
     @AfterEach
-    void tearDown(){
-        if (driver != null){
-            driver.quit();
+    void tearDown() {
+        if (context != null) {
+            context.close();
+        }
+        if (browser != null) {
+            browser.close();
+        }
+        if (playwright != null) {
+            playwright.close();
         }
     }
 }
-

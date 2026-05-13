@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.portfolio</groupId>
-    <artifactId>selenium-e2e-tests</artifactId>
+    <artifactId>e2e-test-automation-framework</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -17,34 +17,36 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <selenium.version>4.18.1</selenium.version>
+        <headless>false</headless>
         <junit.version>5.10.2</junit.version>
         <allure.version>2.25.0</allure.version>
-        <webdrivermanager.version>5.7.0</webdrivermanager.version>
+        <playwright.version>1.52.0</playwright.version>
         <slf4j.version>2.0.12</slf4j.version>
     </properties>
 
     <dependencies>
 
-        <!-- Selenium -->
+        <!-- Playwright -->
         <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>${selenium.version}</version>
+            <groupId>com.microsoft.playwright</groupId>
+            <artifactId>playwright</artifactId>
+            <version>${playwright.version}</version>
         </dependency>
 
-        <!-- WebDriverManager -->
-        <dependency>
-            <groupId>io.github.bonigarcia</groupId>
-            <artifactId>webdrivermanager</artifactId>
-            <version>${webdrivermanager.version}</version>
-        </dependency>
 
         <!-- JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- AssertJ -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.26.3</version>
             <scope>test</scope>
         </dependency>
 
@@ -93,6 +95,7 @@
                         <artifactId>aspectjweaver</artifactId>
                         <version>1.9.21</version>
                     </dependency>
+
                 </dependencies>
             </plugin>
 

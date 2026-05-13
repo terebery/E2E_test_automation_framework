@@ -1,15 +1,96 @@
-name: Selenium E2E Tests
-on: [push, pull_request]
+name: E2E test automation framework
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with: { java-version: '17', distribution: 'temurin' }
-      - run: mvn test -Dheadless=true
-      - uses: actions/upload-artifact@v3
+      - uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Install Playwright browsers
+        run: mvn exec:java - Dexec.mainClass="com.microsoft.playwright.CLI" -Dexec.args="install --with-deps chromium"
+
+      - name: Prepare allure results directory
+        run: |
+          rm -rf allure-results
+          mkdir allure-results
+          echo "Environment=Github Actions" > allure-results/environment.properties
+          echo "Java=17" >> allure-results/environment.properties
+          echo "Framework=Playwright" >> allure-results/environment.properties
+          echo "Browser=Chromium" >> allure-results/environment.properties
+
+      - name: Run tests
+        run: |
+          mvn clean test -Pci 2>&1 | tee test-output.log
+          test ${PIPESTATUS[0]} -eq 0
+
+      - name: Debug allure results content
+        if: always()
+        run: |
+          echo "Allure files:"
+          find allure-results -maxdepth 2 -type f | sort || true;
+          echo "result.json count: $(find allure-results -name '*-container.json' | wc -l)"
+
+      - name: Validate allure results are present
+        if: always()
+        run: |
+          test"$(find allure-results -name '*-container.json' | wc -l)" -gt 0
+
+      - name: Upload allure results
+        uses: actions/upload-artifact@v4
         if: always()
         with:
+            name: allure-results
+            path: |
+              allure-results
+              maven-test-output.log
+
+  deploy-report:
+    runs-on: ubuntu-latest
+    needs: test
+    if: always()
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download allure results
+        uses: actions/download-artifact@v4
+        with:
           name: allure-results
-          path: target/allure-results
+          path: .
+
+      - name: Debug downloaded results
+        run: |
+            echo "Downloaded Allure files:"
+            find allure-results -maxdepth 2 -type f | sort || true;
+            echo "result.json count: $(find allure-results -name '*-container.json' | wc -l)"
+
+      - name: Load Allure report history
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Generate Allure report
+        uses: simple-elf/allure-report-action@master
+        with:
+            allure_results: allure-results
+            allure_history: allure-history
+            gh_pages: gh-pages
+      - name: Deploy Allure report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./allure-report
+

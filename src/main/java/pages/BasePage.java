@@ -1,51 +1,40 @@
 package pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
 
 import java.time.Duration;
 
 public abstract class BasePage {
-    protected WebDriver driver;
-    protected WebDriverWait wait;
+    protected Page page;
 
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
 
-    public BasePage(WebDriver driver) {
-        this.driver = driver ;
-        this.wait = new WebDriverWait(driver, DEFAULT_TIMEOUT);
+    public BasePage(Page page){
+        this.page = page;
     }
 
-    protected WebElement waitForElement(By locator){
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    protected Locator locator(String selector){
+        return page.locator(selector);
     }
 
-    protected void click(By locator){
-        wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
+    protected void click(String selector){
+        page.locator(selector).click();
 
     }
-    protected void type(By locator, String text){
-        WebElement element = waitForElement(locator);
+    protected void type(String selector, String text){
+        Locator element = page.locator(selector);
         element.clear();
-        element.sendKeys(text);
+        element.fill(text);
+
     }
-    protected String getText(By locator){
-        return waitForElement(locator).getText();
+    protected String getText(String selector){
+        return page.locator(selector).textContent();
     }
-    protected void scrollIntoView(By locator){
-        WebElement element = waitForElement(locator);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+    protected void scrollIntoView(String selector){
+        page.locator(selector).scrollIntoViewIfNeeded();
     }
-    protected boolean isDisplayed(By locator){
-        try{
-            return driver.findElement(locator).isDisplayed();
-        }catch (Exception e){
-            return false;
-        }
+    protected boolean isDisplayed(String selector){
+        return page.locator(selector).isVisible();
     }
 }
