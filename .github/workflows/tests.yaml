@@ -84,12 +84,14 @@ jobs:
           allure_history: allure-history
           gh_pages: gh-pages
 
-      - name: Deploy Allure report to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_branch: main
-            publish_dir: ./allure-history
-            destination_dir: docs
-            keep_files: false
-            enable_jekyll: false
+      - name: Commit report to docs/
+        run: |
+          rm -rf docs
+          mkdir -p docs
+          cp -r allure-history/* docs/
+          touch docs/.nojekyll
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs
+          git diff --staged --quiet || git commit -m "chore: update Allure report [skip ci]"
+          git push origin HEAD:main
