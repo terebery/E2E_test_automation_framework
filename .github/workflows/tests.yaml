@@ -76,24 +76,6 @@ jobs:
           find allure-results -maxdepth 2 -type f | sort || true
           echo "container.json count: $(find allure-results -name '*-container.json' | wc -l)"
 
-      - name: Load Allure report history
-        uses: actions/checkout@v4
-        continue-on-error: true
-        with:
-          ref: gh-pages
-          path: gh-pages
-      - name: Create gh-pages branch if not exists
-        run: |
-            git fetch origin gh-pages || true
-            git worktree add gh-pages origin/gh-pages 2>/dev/null || (
-              git checkout --orphan gh-pages-temp &&
-              git rm -rf . &&
-              echo "<html><body>init</body></html>" > index.html &&
-              git add index.html &&
-              git commit -m "Initialize gh-pages" &&
-              git push origin HEAD:gh-pages &&
-              git checkout main
-            ) || true
 
       - name: Generate Allure report
         uses: simple-elf/allure-report-action@master
@@ -105,8 +87,9 @@ jobs:
       - name: Deploy Allure report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: ./allure-history
-          force_orphan: true
-          enable_jekyll: false
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_branch: main
+            publish_dir: ./allure-history
+            destination_dir: docs
+            keep_files: false
+            enable_jekyll: false
