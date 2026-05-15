@@ -1,0 +1,1 @@
+{"aec14a6ae7c3c0bcb1292836eb01b54c":{"statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1},"items":[{"uid":"fd59f2d8a40686a4","reportUrl":"https://terebery.github.io/E2E_test_automation_framework/12/#testresult/fd59f2d8a40686a4","status":"passed","time":{"start":1778743601304,"stop":1778743610449,"duration":9145}}]}}

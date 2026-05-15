@@ -1,0 +1,2 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"Fill all required fields and verify success modal appears","9145","FR-01: Successful form submission shows confirmation modal","","Thu May 14 07:26:41 UTC 2026","passed","Thu May 14 07:26:50 UTC 2026","","tests.forms.PracticeFormTest","tests.forms.PracticeFormTest","shouldShowSuccessModalAfterValidSubmission"
