@@ -25,6 +25,7 @@ public class PracticeFormPage extends BasePage {
     private static final String successModal = "#example-modal-sizes-title-lg";
     private static final String modalTableRows = ".table-responsive tbody tr";
     private static final String closeModalButton = "#closeLargeModal";
+    private static final String formWasValidated = "form#userForm.was-validated";
 
     public PracticeFormPage(Page page){
         super(page);
@@ -107,6 +108,30 @@ public class PracticeFormPage extends BasePage {
 
         return "";
     }
+
+    public boolean isFormValidated(){
+        return page.locator(formWasValidated).count() > 0;
+    }
+
+    public boolean isMobileInvalid(){
+        return Boolean.FALSE.equals(page.locator(mobileInput).evaluate("input => input.checkValidity()"));
+    }
+
+    public boolean isFirstNameInvalid(){
+        return Boolean.FALSE.equals(page.locator(firstNameInput).evaluate("input => input.checkValidity()"));
+    }
+
+    public boolean isLastNameInvalid(){
+        return Boolean.FALSE.equals(page.locator(lastNameInput).evaluate("input => input.checkValidity()"));
+    }
+
+    public boolean isGenderInvalid(){
+        boolean maleChecked = page.locator(genderMale).isChecked();
+        boolean femaleChecked = page.locator(genderFemale).isChecked();
+        boolean otherChecked = page.locator(genderOther).isChecked();
+
+        return !maleChecked && !femaleChecked && !otherChecked;
+   }
     public void closeModal(){
         click(closeModalButton);
     }
