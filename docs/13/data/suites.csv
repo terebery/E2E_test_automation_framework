@@ -1,3 +1,0 @@
-"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"Fill all required fields and verify success modal appears","8670","FR-01: Successful form submission shows confirmation modal","","Fri May 15 12:53:44 UTC 2026","passed","Fri May 15 12:53:53 UTC 2026","","tests.forms.PracticeFormTest","tests.forms.PracticeFormTest","shouldShowSuccessModalAfterValidSubmission"
-"User is prevented from submitting an empty form","11884","FR-02: Required field validation prevents form submission","","Fri May 15 12:53:53 UTC 2026","passed","Fri May 15 12:54:05 UTC 2026","","tests.forms.PracticeFormTest","tests.forms.PracticeFormTest","submittingEmptyFormDoesNotOpenSuccessModal"
