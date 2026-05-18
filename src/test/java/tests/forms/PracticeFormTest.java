@@ -93,8 +93,80 @@ class PracticeFormTest extends BaseTest {
 
         Allure.step("And required field: Gender is invalid",() ->
         assertThat(form.isGenderInvalid())
-                .as("Gender) field should be marked as invalid when not selected")
+                .as("Gender field should be marked as invalid when not selected")
                 .isTrue());
+    }
+
+    @Test
+    @DisplayName("FR-03: Student name displayed correctly in modal")
+    @Description("First and last name in modal are equals to the submitted ones")
+    @Severity(SeverityLevel.BLOCKER)
+    void studentNameIsDisplayedCorrectlyInModal(){
+        Allure.parameter("First Name",FIRST_NAME);
+        Allure.parameter("Last Name",LAST_NAME);
+        Allure.parameter("Mobile",MOBILE);
+        Allure.parameter("Email", EMAIL);
+
+        Allure.step("When user fills out the form with valid data and submits", () -> {
+            form.enterFirstName(FIRST_NAME);
+            form.enterLastName(LAST_NAME);
+            form.enterMobile(MOBILE);
+            form.enterEmailInput(EMAIL);
+            form.selectGenderMale();
+            form.submitForm();
+        });
+        Allure.step("And form enters validated state", () ->
+        assertThat(form.isFormValidated())
+           .as("Form should show validation errors when submitted empty")
+           .isTrue());
+
+        Allure.step("And modal is opened successfully ", () ->
+                assertThat(form.isSuccessModalDisplayed())
+                        .as("Success modal is displayed")
+                        .isTrue()
+                );
+
+        Allure.step("Then the modal should display the correct student name", () ->
+        assertThat(form.getModalValue("Student Name" ))
+                .as("Modal should display the correct student name")
+                .isEqualTo(FIRST_NAME + " " + LAST_NAME)
+        );
+    }
+    @Test
+    @DisplayName("FR-04: Email displayed correctly in modal")
+    @Description("User is prevented from submitting an empty form")
+    @Severity(SeverityLevel.BLOCKER)
+    void studentEmailIsDisplayedCorrectlyInModal(){
+        Allure.parameter("First Name",FIRST_NAME);
+        Allure.parameter("Last Name",LAST_NAME);
+        Allure.parameter("Mobile",MOBILE);
+        Allure.parameter("Email", EMAIL);
+
+        Allure.step("When user fills out the form with valid data and submits", () -> {
+            form.enterFirstName(FIRST_NAME);
+            form.enterLastName(LAST_NAME);
+            form.enterMobile(MOBILE);
+            form.enterEmailInput(EMAIL);
+            form.selectGenderMale();
+            form.submitForm();
+        });
+        Allure.step("And form enters validated state", () ->
+                assertThat(form.isFormValidated())
+                        .as("Form should show validation errors when submitted empty")
+                        .isTrue());
+
+        Allure.step("And modal is opened successfully ", () ->
+                assertThat(form.isSuccessModalDisplayed())
+                        .as("Success modal is displayed")
+                        .isTrue()
+        );
+        Allure.step("Then the modal should display the correct student email", () ->
+                assertThat(form.getModalValue("Student Email" ))
+                        .as("Modal should display the correct student name")
+                        .isEqualTo(EMAIL)
+        );
+
+
     }
 }
 
