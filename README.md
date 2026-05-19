@@ -24,17 +24,23 @@ E2E_test_automation_framework/
 ├── .github/
 │   └── workflows/
 │       └── tests.yaml                       # CI/CD pipeline
+│── doc/
+│   └── requirements/
+│       ├── practice-form.md                # form test requirements
+│       └── text-box.md                     # text box test requirements
 ├── src/
 │   ├── main/java/
 │   │   └── pages/
 │   │       ├── BasePage.java                # shared Playwright utilities
 │   │       └── forms/
-│   │           └── PracticeFormPage.java    # Practice Form page object
+│   │           ├── PracticeFormPage.java    # Practice Form page object
+    │           └── TextBoxPage.java         # Text Box page object
 │   └── test/java/
 │       └── tests/
 │           ├── BaseTest.java                # Playwright setup & teardown
 │           ├── ScreenshotOnFailureExtension.java
 │           └── forms/
-│               └── PracticeFormTest.java    # form test scenarios
+│               ├── PracticeFormTest.java    # form test scenarios
+├               └── TextBoxPage.java         # text box test scenarios
 ├── pom.xml
 └── README.md
