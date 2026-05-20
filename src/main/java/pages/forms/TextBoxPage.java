@@ -21,7 +21,7 @@ public class TextBoxPage extends BasePage {
     private static final String outputName = "#name";
     private static final String outputMail = "#email";
     private static final String outputCurrentAddress = "#currentAddress.mb-1";
-    private static final String outputPermanentAddress = "#permamentAddress.mb-1";
+    private static final String outputPermanentAddress = "#permanentAddress.mb-1"; //document.querySelector("#permanentAddress")
 
     public TextBoxPage(Page page){
         super(page);

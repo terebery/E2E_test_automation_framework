@@ -12,6 +12,7 @@ import pages.forms.TextBoxPage;
 import tests.BaseTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 @Feature("Text Box")
 public class TextBoxTest extends BaseTest{
     private TextBoxPage form;
@@ -68,6 +69,15 @@ public class TextBoxTest extends BaseTest{
 
     }
 
-
-
-}
+    @Test
+    @DisplayName("FR-06: Output panel is not visible before submission")
+    @Description("Check that output panel is not visible before form submission")
+    @Severity(SeverityLevel.NORMAL)
+    void outputPanelIsNOTVisibleBeforeSubmission (){
+        Allure.step("Check that output panel is not visible before form submission", () -> {
+            assertThat(form.outputFormIsVisible())
+                    .as("Output panel should not be visible before form submission")
+                    .isFalse();
+        });
+        }
+    }
